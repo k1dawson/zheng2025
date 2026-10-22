@@ -1,6 +1,6 @@
 ---
-title: "Reproducibility Report for Study X by Sample & Sample (20xx, Psychological Science)"
-author: "Reproducibility Project Author[s] (contact information)"
+title: "Reproducibility Report for Study X by Sample & Sample (2025, Current Biology)"
+author: "Kana Dawson (kdawson@ucsd.edu)"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 format:
   html:
@@ -20,9 +20,13 @@ format:
 
 Please describe why you chose to reproduce the results of this study.
 
+I am choosing this study because it applies to my own research and is also incredibly well documented, so I think it will fit nicely for this project. It involves a lot of different interesting findings/experiments that concern the neural mechanisms of social behavior in a species of mouse. Specifically, I want to replicate the finding that cIPAG inhibition causes deficits in vocal behavior such that male mice included in the study made progressively shorter calls over the course of several days. These findings are summarized in figure 7 of the paper. I think the data looks really nice and I appreciate the intervention method.
+
 ### Anticipated challenges
 
 Do you anticipate running into any challenges when attempting to reproduce these result(s)? If so please, list them here.
+
+I think it will be difficult for me to convert code from python into R. All of the author's analysis is done via jupyter notebooks, but I would like to do the project in R, so I need to be able to understand how to understand their code and translate it similarly into R. I also think it will be difficult to simulate data at the correct level, instead of simulating raw data I will be simulating the time-stamped vocal behavior (as I can't simulate video/audio files of behavior). This is a pretty large amount of data that is all separated into different files, looking at the data they provided. I will need to make sure the organization of this data is clear and manageable the way that they did.
 
 ### Links
 
@@ -34,7 +38,7 @@ Original paper (as hosted in your repo):
 
 ### Description of the steps required to reproduce the results
 
-Please describe all the steps necessary to reproduce the key result(s) of this study. 
+I have downloaded the data files for this experiment from the resource provided in the paper. I can run analyses on song duration for each mouse with respect to its condition (time from inhibitory injection) across sessions to get a statistical summary of vocal behavior for each participant. Then, 
 
 ### Differences from original study
 
