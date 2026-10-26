@@ -1,0 +1,11 @@
+session,basepath,mouse_1,mouse_2,condition,processed,anchor_file_idx,num_post_days,num_vocal_days
+230818_MZ034_MZ035_2,Mike/behavior/div_cage,MZ034,MZ035,pre,240331,397,,1
+230819_MZ034_MZ035_3,Mike/behavior/div_cage,MZ034,MZ035,post,240408,417,5,3
+231226_UM008_UF003_1,Mike/behavior/div_cage,UM008,UF003,pre,240410,98,,1
+231227_UM008_UF003_2,Mike/behavior/div_cage,UM008,UF003,post,240411,120,6,5
+240102_MZ045_MZ046_1,Mike/behavior/div_cage,MZ045,MZ046,pre,240415,257,,1
+240103_MZ045_MZ046_2,Mike/behavior/div_cage,MZ045,MZ046,post,240416,282,5,3
+240110_UM007_UF003_1,Mike/behavior/div_cage,UM007,UF003,pre,240419,426,,1
+240111_UM007_UF003_2,Mike/behavior/div_cage,UM007,UF003,post,240420,447,5,3
+240122_UM006_MZ040_1,Mike/behavior/div_cage,UM006,MZ040,pre,240422,565,,1
+240123_UM006_MZ040_2,Mike/behavior/div_cage,UM006,MZ040,post,240423,585,5,3
