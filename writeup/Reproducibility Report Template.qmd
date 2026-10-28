@@ -13,8 +13,6 @@ format:
 
 ## Introduction
 
-\[No abstract is needed.\] Each reproducibility project will have a straightforward, no frills report of the study and reproducibility results. These reports will be publicly available as supplementary material for the aggregate report(s) of the project as a whole. Also, to maximize project integrity, the intro and methods will be written and critiqued in advance of your attempt to reproduce the results. Introductions can be just 1-2 paragraphs clarifying the main idea of the original study, the target finding for your reproducibility attempt, and any other essential information. It will NOT have a literature review -- that is in the original publication. You can write both the introduction and the methods in past tense.
-
 **Clarify key analysis of interest here** You can also pre-specify additional analyses you plan to do.
 
 ### Justification for choice of study
@@ -49,11 +47,11 @@ I will be using R instead of python to conduct my analysis. Also I will be simul
 
 ### Measure of success
 
-Please describe the outcome measure for the success or failure of your reproduction and how this outcome will be computed.
+I will be replicating the Mann-Whitney test comparing pre-injection to post-late (p = 1.53e - 19). I would consider the simulation successful if I find a similarly significant p-value (after using the same method/parameters for determining song duration using simulated notes per session). I will be comparing song duration in seconds across day 1 and day 5.
 
 ### Pipeline progress
 
-Earlier in this report, you described the steps necessary to reproduce the key result(s) of this study. Please describe your progress on each of these steps (e.g., data preprocessing, model fitting, model evaluation).
+I am currently still in the process of understanding how they did the data analysis themselves. It is hard for me to understand exactly what they did because I don't read python very well. So far, I have loaded their data into R (all vocal notes made by all mice in all sessions), and filtered out only male song notes and done some very basic plotting. I have found that song note duration follows the same trend in decreasing across conditions for all mice. I have been attempting to compare average song duration (replicating same figure with the same data) but I am struggling to translate the exact methods into R from jupyter notebook. The findings are still the same according to the plots, but the average song durations are much shorter in my code compared to the way they calculate song duration. I am working on getting the parameters right so that I am capturing song duration accurately from individual notes.
 
 ## Results
 
