@@ -13,14 +13,16 @@ format:
 
 ## Introduction
 
-[No abstract is needed.]  Each reproducibility project will have a straightforward, no frills report of the study and reproducibility results. These reports will be publicly available as supplementary material for the aggregate report(s) of the project as a whole.  Also, to maximize project integrity, the intro and methods will be written and critiqued in advance of your attempt to reproduce the results. Introductions can be just 1-2 paragraphs clarifying the main idea of the original study, the target finding for your reproducibility attempt, and any other essential information.  It will NOT have a literature review -- that is in the original publication. You can write both the introduction and the methods in past tense.  
+\[No abstract is needed.\] Each reproducibility project will have a straightforward, no frills report of the study and reproducibility results. These reports will be publicly available as supplementary material for the aggregate report(s) of the project as a whole. Also, to maximize project integrity, the intro and methods will be written and critiqued in advance of your attempt to reproduce the results. Introductions can be just 1-2 paragraphs clarifying the main idea of the original study, the target finding for your reproducibility attempt, and any other essential information. It will NOT have a literature review -- that is in the original publication. You can write both the introduction and the methods in past tense.
 
-**Clarify key analysis of interest here**  You can also pre-specify additional analyses you plan to do.
+**Clarify key analysis of interest here** You can also pre-specify additional analyses you plan to do.
 
 ### Justification for choice of study
+
 I am choosing this study because it applies to my own research and is also incredibly well documented, so I think it will fit nicely for this project. It involves a lot of different interesting findings/experiments that concern the neural mechanisms of social behavior in a species of mouse. Specifically, I want to replicate the finding that cIPAG inhibition causes deficits in vocal behavior such that male mice included in the study made progressively shorter calls over the course of several days. These findings are summarized in figure 7 of the paper. Specifically, I would like to replicate the finding that song duration is significantly decreased in post-late injection condition compared to pre-injection. I think the data looks really nice and I appreciate the intervention method.
 
 ### Anticipated challenges
+
 I think it will be difficult for me to convert code from python into R. All of the author's analysis is done via jupyter notebooks, but I would like to do the project in R, so I need to be able to understand how to understand their code and translate it similarly into R. I also think it will be difficult to simulate data at the correct level, instead of simulating raw data I will be simulating the time-stamped vocal behavior (as I can't simulate video/audio files of behavior). This is a pretty large amount of data that is all separated into different files, looking at the data they provided. I will need to make sure the organization of this data is clear and manageable the way that they did.
 
 Currently, I believe the most challenging part is extracting "song duration" in the same way the authors did. This involves not only filtering out all notes of type "song" made by male mice, but linking these song notes together into song durations. I am working on understanding how they quantify songs in their code so I can use the same parameters in my analysis (see current progress in jupyter_translate on this repo). After translating everything into R, I can conduct enough analyses of the data to understand how to simulate it for my own study.
@@ -32,13 +34,16 @@ Project repository (on Github): [repo](https://github.com/k1dawson/zheng2025/tre
 Original paper (as hosted in your repo): [paper](https://github.com/k1dawson/zheng2025/blob/main/original_paper/Zheng_et_al_2025.pdf)
 
 ## Methods
-In this paper, they tested whether inhibition of the brain area cIPAG causes a deficit in singing behavior in male singing mice. They recorded audio from 5 male mice during behavioral sessions in which they could interact with a female conspecific (social context which normally prompts singing vocalizations). They recorded vocalizations pre and post-injection of a chemogenetic inhibitor into cIPAG and analyzed this audio using a model which categorized vocalizations into individual notes with timestamps and vocalization type. 
+
+In this paper, they tested whether inhibition of the brain area cIPAG causes a deficit in singing behavior in male singing mice. They recorded audio from 5 male mice during behavioral sessions in which they could interact with a female conspecific (social context which normally prompts singing vocalizations). They recorded vocalizations pre and post-injection of a chemogenetic inhibitor into cIPAG and analyzed this audio using a model which categorized vocalizations into individual notes with timestamps and vocalization type.
 
 ### Description of the steps required to reproduce the results
+
 I have downloaded the data files for this experiment from the resource provided in the paper. I can run analyses on song duration for each mouse with respect to its condition (time from inhibitory injection) across sessions to get a statistical summary of vocal behavior for each participant. Then, I will simulate a data consisting of individual call durations during each session for each of 5 mice. The number of behavioral observations varies in each session, so I will produce data observations within a range. Then, I will compare average song durations between time points, and check if there is a significant difference in call duration between each timepoint. The authors used Mann-Whitney U-tests for this.
 
 ### Differences from original study
-I will be using R instead of python to conduct my analysis. Also I will be simulating semi-processed data instead of the raw behavioral data. 
+
+I will be using R instead of python to conduct my analysis. Also I will be simulating semi-processed data instead of the raw behavioral data.
 
 ## Project Progress Check 1
 
@@ -46,18 +51,16 @@ I will be using R instead of python to conduct my analysis. Also I will be simul
 
 Please describe the outcome measure for the success or failure of your reproduction and how this outcome will be computed.
 
-
 ### Pipeline progress
 
 Earlier in this report, you described the steps necessary to reproduce the key result(s) of this study. Please describe your progress on each of these steps (e.g., data preprocessing, model fitting, model evaluation).
-
 
 ## Results
 
 ### Data preparation
 
 Data preparation following the analysis plan.
-	
+
 ```{r include=F}
 ### Data Preparation
 
@@ -72,20 +75,20 @@ Data preparation following the analysis plan.
 
 ### Key analysis
 
-The analyses as specified in the analysis plan.  
+The analyses as specified in the analysis plan.
 
 *Side-by-side graph with original graph is ideal here*
 
 ### Exploratory analyses
 
-Any follow-up analyses desired (not required).  
+Any follow-up analyses desired (not required).
 
 ## Discussion
 
 ### Summary of Reproduction Attempt
 
-Open the discussion section with a paragraph summarizing the primary result from the key analysis and assess whether you successfully reproduced it, partially reproduced it, or failed to reproduce it.  
+Open the discussion section with a paragraph summarizing the primary result from the key analysis and assess whether you successfully reproduced it, partially reproduced it, or failed to reproduce it.
 
 ### Commentary
 
-Add open-ended commentary (if any) reflecting (a) insights from follow-up exploratory analysis of the dataset, (b) assessment of the meaning of the successful or unsuccessful reproducibility attempt - e.g., for a failure to reproduce the original findings, are the differences between original and present analyses ones that definitely, plausibly, or are unlikely to have been moderators of the result, and (c) discussion of any objections or challenges raised by the current and original authors about the reproducibility attempt (if you contacted them).  None of these need to be long.
+Add open-ended commentary (if any) reflecting (a) insights from follow-up exploratory analysis of the dataset, (b) assessment of the meaning of the successful or unsuccessful reproducibility attempt - e.g., for a failure to reproduce the original findings, are the differences between original and present analyses ones that definitely, plausibly, or are unlikely to have been moderators of the result, and (c) discussion of any objections or challenges raised by the current and original authors about the reproducibility attempt (if you contacted them). None of these need to be long.
