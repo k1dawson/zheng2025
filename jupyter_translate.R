@@ -4,8 +4,8 @@ library(tidyverse)
 
 
 # load the sessions.csv and session_curation.csv ----
-sessions_info <- read_csv(file.choose())
-sessions_curated_hours_info <- read_csv(file.choose())
+sessions_info <- read_csv("~/Documents/GitHub/zheng2025/original_paper/telc_data/pag_telc/pag_telc_sessions.csv")
+sessions_curated_hours_info <- read_csv("~/Documents/GitHub/zheng2025/original_paper/telc_data/pag_telc/pag_telc_curation.csv")
 
 
 
@@ -33,7 +33,7 @@ write_csv(
   file.path(data_dir, "pag_telc_curation_updated.csv")
 )
 
-# ----
+# Look at one file X----
 #look at one session file from the data (all_notes_corrected_features)
 notes <- read_csv(file.choose())
 
@@ -41,7 +41,7 @@ glimpse(notes)
 names(notes)
 head(notes)
 
-# load_notes function for gathering data from all sessions and combining with metadata ----
+# load_notes function for gathering data from all sessions and combining with metadata X ----
 load_notes <- function(folder, session_id, file_idx,
                        mouse_1, mouse_2,
                        curated = FALSE) {
@@ -95,14 +95,14 @@ load_notes <- function(folder, session_id, file_idx,
       mouse_id = as.character(mouse_2),
       mouse_side = "mouse_2"
     )
-  
+ 
   list(
     all_notes = notes,
     left_notes = left_notes,
     right_notes = right_notes,
     filepath = filepath
   )
-}
+                       }
 
 # create all_sessions list of all data in pag.telc ----
 all_sessions <- list()
@@ -464,3 +464,4 @@ male_songs |>
     fraction_single_note = mean(num_notes == 1),
     .groups = "drop"
   )
+
