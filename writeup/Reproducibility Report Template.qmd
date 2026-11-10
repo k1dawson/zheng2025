@@ -33,7 +33,7 @@ Original paper (as hosted in your repo): [paper](https://github.com/k1dawson/zhe
 
 ## Methods
 
-In this paper, they tested whether inhibition of the brain area cIPAG causes a deficit in singing behavior in male singing mice. They recorded audio from 5 male mice during behavioral sessions in which they could interact with a female conspecific (social context which normally prompts singing vocalizations). They recorded vocalizations pre and post-injection of a chemogenetic inhibitor into cIPAG and analyzed this audio using a model which categorized vocalizations into individual notes with timestamps and vocalization type.
+In this paper, they tested whether inhibition of the brain area cIPAG causes a deficit in singing behavior in male singing mice. They recorded audio from 5 male mice during behavioral sessions in which they could interact with a female conspecific (social context which normally prompts singing vocalizations). They recorded vocalizations pre and post-injection of a synaptic silencer (TeLC) into cIPAG and analyzed this audio using a model which categorized vocalizations into individual notes with timestamps and vocalization type.
 
 ### Description of the steps required to reproduce the results
 
@@ -77,9 +77,11 @@ The analyses as specified in the analysis plan.
 
 *Side-by-side graph with original graph is ideal here*
 
+![original data](images/figure7c.png)![violin plot of simulated data](images/sim_figure.png)
+
 ### Exploratory analyses
 
-Any follow-up analyses desired (not required).
+![within-subjects boxplot of individual mice if anybody wanted to see it](images/boxplots.png)
 
 ## Discussion
 

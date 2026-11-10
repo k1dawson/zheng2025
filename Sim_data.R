@@ -49,3 +49,64 @@ sim_data_mice <- sim_data %>%
   mutate(
     duration = duration * exp(mouse_effect)
   )
+
+
+# Plot simulated song durations ----
+
+sim_data_mice <- sim_data_mice %>%
+  mutate(
+    condition = factor(
+      condition,
+      levels = c("Pre", "Post-early", "Post-late")
+    )
+  )
+
+
+#violin plot of simulated mouse data (pseudobulked)
+ggplot(sim_data_mice,
+       aes(x = condition, y = duration, fill = condition)) +
+  geom_violin(trim = TRUE, alpha = 0.9) +
+  geom_boxplot(
+    width = 0.15,
+    fill = "grey40",
+    color = "grey40",
+    alpha = 0.7,
+    outlier.shape = NA
+  ) +
+  scale_fill_manual(values = c(
+    "Pre" = "#1f77b4",
+    "Post-early" = "#ff7f0e",
+    "Post-late" = "#2ca02c"
+  )) +
+  labs(
+    x = NULL,
+    y = "Song duration (s)",
+    title = "Simulated song durations"
+  ) +
+  scale_y_continuous(breaks = seq(0, 16, by = 1)) +
+  coord_cartesian(ylim = c(0, 16)) +
+  theme_classic() +
+  theme(
+    legend.position = "none",
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 13)
+  )
+
+#box plots of individual mice for within-subjects comparisons
+ggplot(sim_data_mice,
+       aes(x = condition, y = duration, fill = condition)) +
+  geom_boxplot() +
+  facet_wrap(~ mouse) +
+  scale_fill_manual(values = c(
+    "Pre" = "#1f77b4",
+    "Post-early" = "#ff7f0e",
+    "Post-late" = "#2ca02c"
+  )) +
+  labs(
+    x = "Condition",
+    y = "Song duration (s)",
+    title = "Simulated song durations by mouse"
+  ) +
+  theme_classic() +
+  theme(legend.position = "none")
+
