@@ -52,6 +52,12 @@ load_notes <- function(folder, session_id, file_idx,
     "all_notes.csv"
   )
   
+  # Match the notebook: curated hours are only loaded from
+  # all_notes_corrected_features.csv (no fallback); hours without it are skipped
+  if (curated) {
+    filenames <- "all_notes_corrected_features.csv"
+  }
+  
   paths <- file.path(folder, filenames)
   existing <- paths[file.exists(paths)]
   
