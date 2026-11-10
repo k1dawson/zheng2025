@@ -317,6 +317,8 @@ male_notes_all <- curated_notes |>
   filter(code == 0) |>
   distinct(session_id, file_idx, start, end, .keep_all = TRUE) |>
   arrange(session_id, file_idx, start, end)
+# later sections use `male_notes`; point it at the male (code == 0) notes
+male_notes <- male_notes_all
 #filter for only male songs (those receiving treatment)
 #male_notes <- curated_notes %>%
   #filter(mouse_id == mouse_1 & type == 'song')
