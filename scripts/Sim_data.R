@@ -110,3 +110,8 @@ ggplot(sim_data_mice,
   theme_classic() +
   theme(legend.position = "none")
 
+
+
+
+
+
