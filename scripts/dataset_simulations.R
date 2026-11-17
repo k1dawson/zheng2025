@@ -40,20 +40,27 @@ simulate_songs <- function(effect_silence, mouse_sd, mouse_cond_sd, composition 
       mouse_cond_effect = rnorm(n(), 0, mouse_cond_sd)
     )
   
-  songs <- conditions %>% #generate song durations with variability
+  songs <- conditions %>%
     mutate(
-      data = map(n_songs, ~ tibble(
-        mouse_id = sample(
-          mice,
-          size = .x,
-          replace = TRUE,
-          prob = if (composition == "fixed") {
-            fixed_weights
-          } else {
-            rgamma(5, shape = 2)
-          }
+      data = map(n_songs, ~ {
+        weights <- if (composition == "fixed") {
+          fixed_weights
+        } else {
+          rgamma(5, shape = 2)
+        }
+        
+        tibble(
+          mouse_id = c(
+            mice,
+            sample(
+              mice,
+              size = .x - length(mice),
+              replace = TRUE,
+              prob = weights
+            )
+          )
         )
-      ))
+      })
     ) %>%
     unnest(data) %>%
     left_join(mouse_effects, by = "mouse_id") %>%
@@ -150,7 +157,11 @@ settings <- crossing(
   mouse_sd = c(0, 0.1, 0.2, 0.28),
   mouse_cond_sd = c(0, 0.05, 0.1, 0.2),
   composition = c("fixed", "redrawn"),
-  effect_silence = c(0, log(0.85))
+  effect_silence = c(
+    0,
+    log(0.85),
+    log(4.64 / 8.37)
+  )
 ) %>%
   filter(mouse_sd^2 + mouse_cond_sd^2 <= 0.09)
   
@@ -190,28 +201,30 @@ write_csv(results, "simulation_results_revised.csv")
 # Summarize results of simulated dataset analysis ----
 summary_results <- results %>%
   mutate(
-    scenario = if_else(
-      effect_silence == 0,
-      "Null: false positive rate",
-      "Effect: rejection rate"
+    scenario = case_when(
+      effect_silence == 0 ~ "Null: false positive rate",
+      effect_silence == log(0.85) ~ "15% reduction",
+      TRUE ~ "Observed reduction (44.6%)"
     )
   ) %>%
   group_by(
     scenario,
+    effect_silence,
     mouse_sd,
     mouse_cond_sd,
     composition
   ) %>%
   summarise(
-    pooled_rate = mean(pooled_p < 0.05, na.rm = TRUE),
-    mouse_rate = mean(mouse_p < 0.05, na.rm = TRUE),
+    pooled_rate = mean(pooled_p < 0.05),
+    mouse_rate = mean(mouse_p < 0.05),
+    n_simulations = n(),
     .groups = "drop"
   )
 
 summary_results
 
 
-# Plot ----
+# Plot False Positive ----
 summary_results %>%
   filter(scenario == "Null: false positive rate") %>%
   pivot_longer(
