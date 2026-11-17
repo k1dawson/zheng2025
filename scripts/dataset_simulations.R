@@ -8,7 +8,10 @@ set.seed(123)
 
 # Function for creating song duration datasets with different variation parameters 
 # takes effect of treatment, inter-mouse variation, and inter-condition (timepoint) variation per mouse
-simulate_songs <- function(effect_silence, mouse_sd, mouse_cond_sd) {
+simulate_songs <- function(effect_silence, mouse_sd, mouse_cond_sd, composition = "redrawn") {
+  
+  # Sampling weights shared across conditions
+  fixed_weights <- rgamma(5, shape = 2)
   
   mice <- c("sMZ034", "sUM008", "sMZ045", "sUM007", "sUM006") #5 mice from orig paper
   
@@ -44,7 +47,11 @@ simulate_songs <- function(effect_silence, mouse_sd, mouse_cond_sd) {
           mice,
           size = .x,
           replace = TRUE,
-          prob = rgamma(5, shape = 2)
+          prob = if (composition == "fixed") {
+            fixed_weights
+          } else {
+            rgamma(5, shape = 2)
+          }
         )
       ))
     ) %>%
@@ -95,6 +102,12 @@ analyze_songs <- function(d) {
       values_from = mean_log_duration
     )
   
+  if (anyNA(mouse_means$pre_injection) ||
+      anyNA(mouse_means$post_late) ||
+      nrow(mouse_means) != 5) {
+    stop("Missing mouse-condition observations")
+  }
+  
   # Test 2: paired t-test using mouse means
   mouse_p <- t.test(
     mouse_means$pre_injection,
@@ -135,47 +148,60 @@ null_results %>%
 # Generate simulated results with different input values for levels of variation to test when authors' test is invalid ----
 settings <- crossing(
   mouse_sd = c(0, 0.1, 0.2, 0.28),
+  mouse_cond_sd = c(0, 0.05, 0.1, 0.2),
+  composition = c("fixed", "redrawn"),
   effect_silence = c(0, log(0.85))
 ) %>%
-  mutate(
-    mouse_cond_sd = 0.1)
+  filter(mouse_sd^2 + mouse_cond_sd^2 <= 0.09)
   
 
 set.seed(123)
 
-results <- pmap_dfr(settings, function(mouse_sd,
-                                       effect_silence,
-                                       mouse_cond_sd) {
-  
-  map_dfr(1:500, function(i) {
+results <- pmap_dfr(
+  settings,
+  function(mouse_sd, mouse_cond_sd,
+           composition, effect_silence) {
     
-    d <- simulate_songs(
-      effect_silence = effect_silence,
-      mouse_sd = mouse_sd,
-      mouse_cond_sd = mouse_cond_sd
-    )
-    
-    analyze_songs(d) %>%
-      mutate(
-        simulation = i,
+    map_dfr(1:500, function(i) {
+      
+      d <- simulate_songs(
+        effect_silence = effect_silence,
         mouse_sd = mouse_sd,
-        effect_silence = effect_silence
+        mouse_cond_sd = mouse_cond_sd,
+        composition = composition
       )
-  })
-})
+      
+      analyze_songs(d) %>%
+        mutate(
+          simulation = i,
+          mouse_sd = mouse_sd,
+          mouse_cond_sd = mouse_cond_sd,
+          composition = composition,
+          effect_silence = effect_silence
+        )
+    })
+  }
+)
 
-write_csv(results, "simulation_results.csv")
+write_csv(results, "simulation_results_revised.csv")
+
+#write_csv(results, "simulation_results.csv")
 
 # Summarize results of simulated dataset analysis ----
 summary_results <- results %>%
   mutate(
     scenario = if_else(
       effect_silence == 0,
-      "False positive rate",
-      "Power"
+      "Null: false positive rate",
+      "Effect: rejection rate"
     )
   ) %>%
-  group_by(scenario, mouse_sd) %>%
+  group_by(
+    scenario,
+    mouse_sd,
+    mouse_cond_sd,
+    composition
+  ) %>%
   summarise(
     pooled_rate = mean(pooled_p < 0.05, na.rm = TRUE),
     mouse_rate = mean(mouse_p < 0.05, na.rm = TRUE),
@@ -187,7 +213,40 @@ summary_results
 
 # Plot ----
 summary_results %>%
-  filter(scenario == "False positive rate") %>%
+  filter(scenario == "Null: false positive rate") %>%
+  pivot_longer(
+    cols = c(pooled_rate, mouse_rate),
+    names_to = "test",
+    values_to = "false_positive_rate"
+  ) %>%
+  ggplot(aes(
+    x = mouse_cond_sd,
+    y = false_positive_rate,
+    color = test
+  )) +
+  geom_line() +
+  geom_point(size = 2) +
+  geom_hline(
+    yintercept = 0.05,
+    linetype = "dashed"
+  ) +
+  facet_grid(
+    composition ~ mouse_sd,
+    labeller = label_both
+  ) +
+  labs(
+    x = "Mouse-condition SD (log scale)",
+    y = "False positive rate",
+    color = "Statistical test"
+  ) +
+  theme_classic()
+
+# Plot for isolating composition effect ----
+summary_results %>%
+  filter(
+    scenario == "Null: false positive rate",
+    mouse_cond_sd == 0
+  ) %>%
   pivot_longer(
     cols = c(pooled_rate, mouse_rate),
     names_to = "test",
@@ -196,15 +255,22 @@ summary_results %>%
   ggplot(aes(
     x = mouse_sd,
     y = false_positive_rate,
-    color = test
+    color = test,
+    linetype = composition,
+    group = interaction(test, composition)
   )) +
   geom_line() +
   geom_point(size = 3) +
-  geom_hline(yintercept = 0.05, linetype = "dashed") +
-  scale_x_continuous(breaks = c(0, 0.1, 0.2, 0.3)) +
+  geom_hline(
+    yintercept = 0.05,
+    linetype = "dashed",
+    color = "grey50"
+  ) +
   labs(
     x = "Between-mouse SD (log scale)",
     y = "False positive rate",
-    color = "Statistical test"
+    color = "Statistical test",
+    linetype = "Mouse composition"
   ) +
   theme_classic()
+
