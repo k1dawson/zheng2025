@@ -257,7 +257,7 @@ results <- pmap_dfr(
 )
 
 
-write_csv(results, file = here("data/simulation_results.csv"))
+write_csv(results, file = here("data/simulation_results.csv")) # Error: Cannot open file for writing: * '/Users/jamesashby/Desktop/GitHub/zheng2025/writeup/data/simulation_results.csv'
 
 # Summarize results of simulated dataset analysis ----
 summary_results <- results %>%
