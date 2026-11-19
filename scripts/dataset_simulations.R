@@ -2,6 +2,7 @@
 
 # Load Libraries ----
 library(tidyverse)
+library(assertthat)
 set.seed(123)
 
 
@@ -194,9 +195,8 @@ results <- pmap_dfr(
   }
 )
 
-write_csv(results, "simulation_results_revised.csv")
 
-#write_csv(results, "simulation_results.csv")
+write_csv(results, "simulation_results.csv")
 
 # Summarize results of simulated dataset analysis ----
 summary_results <- results %>%
@@ -223,6 +223,13 @@ summary_results <- results %>%
 
 summary_results
 
+# Assert that both tests produce valid false positive results ----
+assert_that(
+  all(summary_results$pooled_rate >= 0 &
+        summary_results$pooled_rate <= 1),
+  all(summary_results$mouse_rate >= 0 &
+        summary_results$mouse_rate <= 1)
+)
 
 # Plot False Positive ----
 summary_results %>%
@@ -287,3 +294,80 @@ summary_results %>%
   ) +
   theme_classic()
 
+
+
+
+
+
+
+
+# worst figures ever ----
+plot_data <- results %>%
+  filter(effect_silence == 0) %>%
+  mutate(
+    total_variation = sqrt(mouse_sd^2 + mouse_cond_sd^2)
+  ) %>%
+  pivot_longer(
+    cols = c(pooled_p, mouse_p),
+    names_to = "test",
+    values_to = "p_value"
+  )
+
+ggplot(plot_data, aes(
+  x = total_variation,
+  y = p_value,
+  color = test
+)) +
+  geom_jitter(
+    width = 0.003,
+    height = 0,
+    alpha = 0.25,
+    size = 1
+  ) +
+  geom_hline(
+    yintercept = 0.05,
+    linetype = "dashed"
+  ) +
+  scale_color_manual(
+    values = c(
+      "pooled_p" = "#E69F00",
+      "mouse_p" = "#0072B2"
+    ),
+    labels = c(
+      "pooled_p" = "Pooled Mann-Whitney",
+      "mouse_p" = "Mouse-level paired t-test"
+    )
+  ) +
+  labs(
+    title = "Distribution of P-values Under the Null Hypothesis",
+    x = "Combined between-mouse and condition variation",
+    y = "P-value",
+    color = "Statistical test"
+  ) +
+  theme_classic()
+
+
+results %>%
+  filter(effect_silence == 0) %>%
+  pivot_longer(
+    cols = c(pooled_p, mouse_p),
+    names_to = "test",
+    values_to = "p_value"
+  ) %>%
+  ggplot(aes(
+    x = -log10(pmax(p_value, .Machine$double.xmin)),
+    y = mouse_sd,
+    color = test
+  )) +
+  geom_jitter(width = 0.002, alpha = 0.3) +
+  geom_hline(
+    yintercept = -log10(0.05),
+    linetype = "dashed"
+  ) +
+  labs(
+    x = "Total variance",
+    y = "-log10(p-value)",
+    color = "Statistical test",
+    title = "Statistical Significance Across Simulated Variability"
+  ) +
+  theme_classic()

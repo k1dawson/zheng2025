@@ -62,7 +62,10 @@ Data preparation following the analysis plan.
 ### Data Preparation
 
 # Load Libraries ----
+# Load Libraries ----
 library(tidyverse)
+library(assertthat)
+library(here)
 set.seed(123)
 
 
@@ -255,9 +258,8 @@ results <- pmap_dfr(
   }
 )
 
-write_csv(results, "simulation_results_revised.csv")
 
-#write_csv(results, "simulation_results.csv")
+write_csv(results, "simulation_results.csv")
 
 # Summarize results of simulated dataset analysis ----
 summary_results <- results %>%
@@ -284,6 +286,13 @@ summary_results <- results %>%
 
 summary_results
 
+# Assert that both tests produce valid false positive results ----
+assert_that(
+  all(summary_results$pooled_rate >= 0 &
+        summary_results$pooled_rate <= 1),
+  all(summary_results$mouse_rate >= 0 &
+        summary_results$mouse_rate <= 1)
+)
 
 # Plot False Positive ----
 summary_results %>%
@@ -314,6 +323,8 @@ summary_results %>%
     color = "Statistical test"
   ) +
   theme_classic()
+
+
 
 # Plot for isolating composition effect ----
 summary_results %>%
@@ -347,6 +358,7 @@ summary_results %>%
     linetype = "Mouse composition"
   ) +
   theme_classic()
+
 
 
 
