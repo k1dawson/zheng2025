@@ -3,6 +3,7 @@
 # Load Libraries ----
 library(tidyverse)
 library(assertthat)
+library(here)
 set.seed(123)
 
 
@@ -196,7 +197,7 @@ results <- pmap_dfr(
 )
 
 
-write_csv(results, "simulation_results.csv")
+write_csv(results, file = here("data/simulation_results.csv"))
 
 # Summarize results of simulated dataset analysis ----
 summary_results <- results %>%
@@ -221,7 +222,7 @@ summary_results <- results %>%
     .groups = "drop"
   )
 
-summary_results
+write_csv(summary_results, file = here("data/simulation_results_summary.csv"))
 
 # Assert that both tests produce valid false positive results ----
 assert_that(

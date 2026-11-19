@@ -1,0 +1,392 @@
+---
+title: "Reproducibility Report for 'Vocal repertoire expansion in singing mice by co-opting a conserved midbrain circuit node' by Zheng et al. (2025, Current Biology)"
+author: "Kana Dawson (kdawson@ucsd.edu)"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+format:
+  html:
+    toc: true
+    toc_depth: 3
+---
+
+<!-- Reproducibility reports should all use this template to standardize reporting across projects. These reports will be public supplementary materials that accompany the summary report(s) of the aggregate results. -->
+
+## Introduction
+
+**Clarify key analysis of interest here** You can also pre-specify additional analyses you plan to do.
+
+### Justification for choice of study
+
+I am choosing this study because it applies to my own research and is also incredibly well documented, so I think it will fit nicely for this project. It involves a lot of different interesting findings/experiments that concern the neural mechanisms of social behavior in a species of mouse. Specifically, I want to replicate the finding that cIPAG inhibition causes deficits in vocal behavior such that male mice included in the study made progressively shorter calls over the course of several days. These findings are summarized in figure 7 of the paper. Specifically, I would like to replicate the finding that song duration is significantly decreased in post-late injection condition compared to pre-injection. I think the data looks really nice and I appreciate the intervention method.
+
+### Anticipated challenges
+
+I think it will be difficult for me to convert code from python into R. All of the author's analysis is done via jupyter notebooks, but I would like to do the project in R, so I need to be able to understand how to understand their code and translate it similarly into R. I also think it will be difficult to simulate data at the correct level, instead of simulating raw data I will be simulating the time-stamped vocal behavior (as I can't simulate video/audio files of behavior). This is a pretty large amount of data that is all separated into different files, looking at the data they provided. I will need to make sure the organization of this data is clear and manageable the way that they did.
+
+Currently, I believe the most challenging part is extracting "song duration" in the same way the authors did. This involves not only filtering out all notes of type "song" made by male mice, but linking these song notes together into song durations. I am working on understanding how they quantify songs in their code so I can use the same parameters in my analysis (see current progress in jupyter_translate on this repo). After translating everything into R, I can conduct enough analyses of the data to understand how to simulate it for my own study.
+
+### Links
+
+Project repository (on Github): [repo](https://github.com/k1dawson/zheng2025/tree/main)
+
+Original paper (as hosted in your repo): [paper](https://github.com/k1dawson/zheng2025/blob/main/original_paper/Zheng_et_al_2025.pdf)
+
+## Methods
+
+In this paper, they tested whether inhibition of the brain area cIPAG causes a deficit in singing behavior in male singing mice. They recorded audio from 5 male mice during behavioral sessions in which they could interact with a female conspecific (social context which normally prompts singing vocalizations). They recorded vocalizations pre and post-injection of a synaptic silencer (TeLC) into cIPAG and analyzed this audio using a model which categorized vocalizations into individual notes with timestamps and vocalization type.
+
+### Description of the steps required to reproduce the results
+
+I have downloaded the data files for this experiment from the resource provided in the paper. I can run analyses on song duration for each mouse with respect to its condition (time from inhibitory injection) across sessions to get a statistical summary of vocal behavior for each participant. Then, I will simulate a data consisting of individual call durations during each session for each of 5 mice. The number of behavioral observations varies in each session, so I will produce data observations within a range. Then, I will compare average song durations between time points, and check if there is a significant difference in call duration between each timepoint. The authors used Mann-Whitney U-tests for this.
+
+### Differences from original study
+
+I will be using R instead of python to conduct my analysis. Also I will be simulating semi-processed data instead of the raw behavioral data.
+
+## Project Progress Check 1
+
+### Measure of success
+
+I will be replicating the Mann-Whitney test comparing pre-injection to post-late (p = 1.53e - 19). I would consider the simulation successful if I find a similarly significant p-value (after using the same method/parameters for determining song duration using simulated notes per session). I will be comparing song duration in seconds across day 1 and day 5.
+
+### Pipeline progress
+
+I am currently still in the process of understanding how they did the data analysis themselves. It is hard for me to understand exactly what they did because I don't read python very well. So far, I have loaded their data into R (all vocal notes made by all mice in all sessions), and filtered out only male song notes and done some very basic plotting. I have found that song note duration follows the same trend in decreasing across conditions for all mice. I have been attempting to compare average song duration (replicating same figure with the same data) but I am struggling to translate the exact methods into R from jupyter notebook. The findings are still the same according to the plots, but the average song durations are much shorter in my code compared to the way they calculate song duration. I am working on getting the parameters right so that I am capturing song duration accurately from individual notes.
+
+## Results
+
+### Data preparation
+
+Data preparation following the analysis plan.
+
+```{r include=T}
+### Data Preparation
+
+# Load Libraries ----
+# Load Libraries ----
+library(tidyverse)
+library(assertthat)
+library(here)
+set.seed(123)
+
+
+
+# Function for creating song duration datasets with different variation parameters 
+# takes effect of treatment, inter-mouse variation, and inter-condition (timepoint) variation per mouse
+simulate_songs <- function(effect_silence, mouse_sd, mouse_cond_sd, composition = "redrawn") {
+  
+  # Sampling weights shared across conditions
+  fixed_weights <- rgamma(5, shape = 2)
+  
+  mice <- c("sMZ034", "sUM008", "sMZ045", "sUM007", "sUM006") #5 mice from orig paper
+  
+  conditions <- tibble( #generate table of conditions and effect, song n taken from paper
+    condition = c("pre_injection", "post_early", "post_late"),
+    n_songs = c(157, 153, 54),
+    effect = c(0, 0, effect_silence)
+  )
+  
+  if (mouse_sd^2 + mouse_cond_sd^2 > 0.09) { #stops simulation if variable parameters don't make sense
+    stop("Mouse SD and mouse-condition SD exceed total variance")
+  }
+  
+  song_sd <- sqrt(0.09 - mouse_sd^2 - mouse_cond_sd^2) #calc song deviation within session for each mouse using mouse variation and cond effect for each mouse
+  
+  mouse_effects <- tibble( #tibble of mouse effects for each mouse
+    mouse_id = mice,
+    mouse_effect = rnorm(5, mean = 0, sd = mouse_sd)
+  )
+  
+  mouse_condition_effects <- expand_grid( #calc condition variation for each mouse
+    mouse_id = mice,
+    condition = conditions$condition
+  ) %>%
+    mutate(
+      mouse_cond_effect = rnorm(n(), 0, mouse_cond_sd)
+    )
+  
+  songs <- conditions %>%
+    mutate(
+      data = map(n_songs, ~ {
+        weights <- if (composition == "fixed") {
+          fixed_weights
+        } else {
+          rgamma(5, shape = 2)
+        }
+        
+        tibble(
+          mouse_id = c(
+            mice,
+            sample(
+              mice,
+              size = .x - length(mice),
+              replace = TRUE,
+              prob = weights
+            )
+          )
+        )
+      })
+    ) %>%
+    unnest(data) %>%
+    left_join(mouse_effects, by = "mouse_id") %>%
+    left_join(
+      mouse_condition_effects,
+      by = c("mouse_id", "condition")
+    ) %>%
+    mutate(
+      song_duration = exp(
+        log(8) +
+          effect +
+          mouse_effect +
+          mouse_cond_effect +
+          rnorm(n(), 0, song_sd)
+      )
+    ) %>%
+    select(mouse_id, condition, song_duration)
+  
+  return(songs)
+}
+
+
+#Function that runs tests on pooled data and individual mice (compare author vs my method)
+analyze_songs <- function(d) {
+  
+  # Keep only pre and post-late songs
+  d <- d %>%
+    filter(condition %in% c("pre_injection", "post_late"))
+  
+  # Test 1: pooled Mann-Whitney
+  pooled_p <- wilcox.test(
+    song_duration ~ condition,
+    data = d,
+    exact = FALSE
+  )$p.value
+  
+  # Calculate mean log duration for each mouse
+  mouse_means <- d %>%
+    group_by(mouse_id, condition) %>%
+    summarise(
+      mean_log_duration = mean(log(song_duration)),
+      .groups = "drop"
+    ) %>%
+    pivot_wider(
+      names_from = condition,
+      values_from = mean_log_duration
+    )
+  
+  if (anyNA(mouse_means$pre_injection) ||
+      anyNA(mouse_means$post_late) ||
+      nrow(mouse_means) != 5) {
+    stop("Missing mouse-condition observations")
+  }
+  
+  # Test 2: paired t-test using mouse means
+  mouse_p <- t.test(
+    mouse_means$pre_injection,
+    mouse_means$post_late,
+    paired = TRUE
+  )$p.value
+  
+  tibble(
+    pooled_p = pooled_p,
+    mouse_p = mouse_p
+  )
+}
+
+
+# Test that both functions work in creating a dummy dataset ----
+sim1 <- simulate_songs(0, 0.1, 0.1)
+sim1 |> count(mouse_id, condition)
+analyze_songs(sim1)
+
+# Generate 500 datasets where there is no treatment effect (of ciPAG silencing), outputs 2 test results per dataset ----
+null_results <- map_dfr(1:500, function(i) {
+  
+  d <- simulate_songs(
+    effect_silence = 0,
+    mouse_sd = 0.1,
+    mouse_cond_sd = 0.1
+  )
+  
+  analyze_songs(d)
+})
+
+null_results %>%
+  summarise(
+    pooled_FPR = mean(pooled_p < 0.05),
+    mouse_FPR = mean(mouse_p < 0.05)
+  )
+
+# Generate simulated results with different input values for levels of variation to test when authors' test is invalid ----
+settings <- crossing(
+  mouse_sd = c(0, 0.1, 0.2, 0.28),
+  mouse_cond_sd = c(0, 0.05, 0.1, 0.2),
+  composition = c("fixed", "redrawn"),
+  effect_silence = c(
+    0,
+    log(0.85),
+    log(4.64 / 8.37)
+  )
+) %>%
+  filter(mouse_sd^2 + mouse_cond_sd^2 <= 0.09)
+  
+
+set.seed(123)
+
+results <- pmap_dfr(
+  settings,
+  function(mouse_sd, mouse_cond_sd,
+           composition, effect_silence) {
+    
+    map_dfr(1:500, function(i) {
+      
+      d <- simulate_songs(
+        effect_silence = effect_silence,
+        mouse_sd = mouse_sd,
+        mouse_cond_sd = mouse_cond_sd,
+        composition = composition
+      )
+      
+      analyze_songs(d) %>%
+        mutate(
+          simulation = i,
+          mouse_sd = mouse_sd,
+          mouse_cond_sd = mouse_cond_sd,
+          composition = composition,
+          effect_silence = effect_silence
+        )
+    })
+  }
+)
+
+
+write_csv(results, file = here("data/simulation_results.csv"))
+
+# Summarize results of simulated dataset analysis ----
+summary_results <- results %>%
+  mutate(
+    scenario = case_when(
+      effect_silence == 0 ~ "Null: false positive rate",
+      effect_silence == log(0.85) ~ "15% reduction",
+      TRUE ~ "Observed reduction (44.6%)"
+    )
+  ) %>%
+  group_by(
+    scenario,
+    effect_silence,
+    mouse_sd,
+    mouse_cond_sd,
+    composition
+  ) %>%
+  summarise(
+    pooled_rate = mean(pooled_p < 0.05),
+    mouse_rate = mean(mouse_p < 0.05),
+    n_simulations = n(),
+    .groups = "drop"
+  )
+
+summary_results
+
+# Assert that both tests produce valid false positive results ----
+assert_that(
+  all(summary_results$pooled_rate >= 0 &
+        summary_results$pooled_rate <= 1),
+  all(summary_results$mouse_rate >= 0 &
+        summary_results$mouse_rate <= 1)
+)
+
+# Plot False Positive ----
+summary_results %>%
+  filter(scenario == "Null: false positive rate") %>%
+  pivot_longer(
+    cols = c(pooled_rate, mouse_rate),
+    names_to = "test",
+    values_to = "false_positive_rate"
+  ) %>%
+  ggplot(aes(
+    x = mouse_cond_sd,
+    y = false_positive_rate,
+    color = test
+  )) +
+  geom_line() +
+  geom_point(size = 2) +
+  geom_hline(
+    yintercept = 0.05,
+    linetype = "dashed"
+  ) +
+  facet_grid(
+    composition ~ mouse_sd,
+    labeller = label_both
+  ) +
+  labs(
+    x = "Mouse-condition SD (log scale)",
+    y = "False positive rate",
+    color = "Statistical test"
+  ) +
+  theme_classic()
+
+
+
+# Plot for isolating composition effect ----
+summary_results %>%
+  filter(
+    scenario == "Null: false positive rate",
+    mouse_cond_sd == 0
+  ) %>%
+  pivot_longer(
+    cols = c(pooled_rate, mouse_rate),
+    names_to = "test",
+    values_to = "false_positive_rate"
+  ) %>%
+  ggplot(aes(
+    x = mouse_sd,
+    y = false_positive_rate,
+    color = test,
+    linetype = composition,
+    group = interaction(test, composition)
+  )) +
+  geom_line() +
+  geom_point(size = 3) +
+  geom_hline(
+    yintercept = 0.05,
+    linetype = "dashed",
+    color = "grey50"
+  ) +
+  labs(
+    x = "Between-mouse SD (log scale)",
+    y = "False positive rate",
+    color = "Statistical test",
+    linetype = "Mouse composition"
+  ) +
+  theme_classic()
+
+
+
+
+
+#### Load Relevant Libraries and Functions
+
+#### Import data
+
+#### Data exclusion / filtering
+
+#### Prepare data for analysis - create columns etc.
+```
+
+### Key analysis
+
+The analyses as specified in the analysis plan.
+
+*Side-by-side graph with original graph is ideal here*
+
+### Exploratory analyses
+
+## Discussion
+
+### Summary of Reproduction Attempt
+
+Open the discussion section with a paragraph summarizing the primary result from the key analysis and assess whether you successfully reproduced it, partially reproduced it, or failed to reproduce it.
+
+### Commentary
+
+Add open-ended commentary (if any) reflecting (a) insights from follow-up exploratory analysis of the dataset, (b) assessment of the meaning of the successful or unsuccessful reproducibility attempt - e.g., for a failure to reproduce the original findings, are the differences between original and present analyses ones that definitely, plausibly, or are unlikely to have been moderators of the result, and (c) discussion of any objections or challenges raised by the current and original authors about the reproducibility attempt (if you contacted them). None of these need to be long.
+

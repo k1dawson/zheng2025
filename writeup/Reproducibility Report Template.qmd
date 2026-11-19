@@ -59,13 +59,11 @@ I am currently still in the process of understanding how they did the data analy
 Data preparation following the analysis plan.
 
 ```{r include=T}
-### Data Preparation
-
-# Load Libraries ----
 # Load Libraries ----
 library(tidyverse)
 library(assertthat)
 library(here)
+library(renv)
 set.seed(123)
 
 
@@ -259,7 +257,7 @@ results <- pmap_dfr(
 )
 
 
-write_csv(results, "simulation_results.csv")
+write_csv(results, file = here("data/simulation_results.csv"))
 
 # Summarize results of simulated dataset analysis ----
 summary_results <- results %>%
@@ -359,17 +357,6 @@ summary_results %>%
   ) +
   theme_classic()
 
-
-
-
-
-#### Load Relevant Libraries and Functions
-
-#### Import data
-
-#### Data exclusion / filtering
-
-#### Prepare data for analysis - create columns etc.
 ```
 
 ### Key analysis
