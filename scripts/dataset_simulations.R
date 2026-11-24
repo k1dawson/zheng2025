@@ -6,11 +6,35 @@ library(assertthat)
 library(here)
 set.seed(123)
 
+sim_inputs <- readRDS( #read in the weights for each mouse from the real study, convert into form legible for simulate_songs
+  here("data/sim_inputs.rds")
+)
 
+n_songs = desc$n[
+  match(
+    c("pre", "post_early", "post_late"),
+    as.character(desc$full_condition)
+  )
+]
+empirical_weights <- sim_inputs$mouse_weights |>
+  mutate(
+    condition = recode(
+      as.character(full_condition),
+      "pre" = "pre_injection"
+    ),
+    mouse_id = paste0("s", mouse_id)
+  ) |>
+  select(condition, mouse_id, weight)
 
 # Function for creating song duration datasets with different variation parameters 
 # takes effect of treatment, inter-mouse variation, and inter-condition (timepoint) variation per mouse
-simulate_songs <- function(effect_silence, mouse_sd, mouse_cond_sd, composition = "redrawn") {
+simulate_songs <- function(
+    effect_silence,
+    mouse_sd,
+    mouse_cond_sd,
+    composition = "observed",
+    sim_inputs
+) {
   
   # Sampling weights shared across conditions
   fixed_weights <- rgamma(5, shape = 2)
@@ -19,15 +43,19 @@ simulate_songs <- function(effect_silence, mouse_sd, mouse_cond_sd, composition 
   
   conditions <- tibble( #generate table of conditions and effect, song n taken from paper
     condition = c("pre_injection", "post_early", "post_late"),
-    n_songs = c(157, 153, 54),
+    n_songs = sim_inputs$n_songs,
     effect = c(0, 0, effect_silence)
   )
   
-  if (mouse_sd^2 + mouse_cond_sd^2 > 0.09) { #stops simulation if variable parameters don't make sense
+  if (mouse_sd^2 + mouse_cond_sd^2 > sim_inputs$total_sd_log^2) {
     stop("Mouse SD and mouse-condition SD exceed total variance")
   }
   
-  song_sd <- sqrt(0.09 - mouse_sd^2 - mouse_cond_sd^2) #calc song deviation within session for each mouse using mouse variation and cond effect for each mouse
+  song_sd <- sqrt(
+    sim_inputs$total_sd_log^2 -
+      mouse_sd^2 -
+      mouse_cond_sd^2
+  ) #calc song deviation within session for each mouse using mouse variation and cond effect for each mouse
   
   mouse_effects <- tibble( #tibble of mouse effects for each mouse
     mouse_id = mice,
@@ -44,19 +72,47 @@ simulate_songs <- function(effect_silence, mouse_sd, mouse_cond_sd, composition 
   
   songs <- conditions %>%
     mutate(
-      data = map(n_songs, ~ {
-        weights <- if (composition == "fixed") {
-          fixed_weights
+      data = map2(condition, n_songs, function(cond, n) {
+        
+        if (composition == "observed") {
+          
+          weights <- sim_inputs$mouse_weights %>%
+            mutate(
+              condition = recode(
+                as.character(full_condition),
+                "pre" = "pre_injection"
+              ),
+              mouse_id = paste0("s", mouse_id)
+            ) %>%
+            filter(condition == cond) %>%
+            slice(match(mice, mouse_id)) %>%
+            pull(weight)
+          
+        } else if (composition == "fixed") {
+          
+          weights <- fixed_weights
+          
+        } else if (composition == "redrawn") {
+          
+          weights <- rgamma(5, shape = 2)
+          
         } else {
-          rgamma(5, shape = 2)
+          stop("Unknown composition")
         }
+        
+        stopifnot(
+          length(weights) == length(mice),
+          all(is.finite(weights)),
+          all(weights >= 0),
+          sum(weights) > 0
+        )
         
         tibble(
           mouse_id = c(
             mice,
             sample(
               mice,
-              size = .x - length(mice),
+              size = n - length(mice),
               replace = TRUE,
               prob = weights
             )
@@ -72,7 +128,7 @@ simulate_songs <- function(effect_silence, mouse_sd, mouse_cond_sd, composition 
     ) %>%
     mutate(
       song_duration = exp(
-        log(8) +
+        sim_inputs$baseline_log +
           effect +
           mouse_effect +
           mouse_cond_effect +
@@ -132,17 +188,31 @@ analyze_songs <- function(d) {
 
 
 # Test that both functions work in creating a dummy dataset ----
-sim1 <- simulate_songs(0, 0.1, 0.1)
-sim1 |> count(mouse_id, condition)
+sim1 <- simulate_songs(
+  effect_silence = 0,
+  mouse_sd = 0.1,
+  mouse_cond_sd = 0.1,
+  composition = "observed",
+  sim_inputs = sim_inputs
+)
+
+sim1 %>%
+  count(condition, mouse_id) %>%
+  group_by(condition) %>%
+  mutate(weight = n / sum(n)) %>%
+  ungroup()
+
 analyze_songs(sim1)
 
 # Generate 500 datasets where there is no treatment effect (of ciPAG silencing), outputs 2 test results per dataset ----
-null_results <- map_dfr(1:500, function(i) {
+null_results <- map_dfr(1:10, function(i) {
   
   d <- simulate_songs(
     effect_silence = 0,
     mouse_sd = 0.1,
-    mouse_cond_sd = 0.1
+    mouse_cond_sd = 0.1,
+    composition = "observed",
+    sim_inputs = sim_inputs
   )
   
   analyze_songs(d)
@@ -158,14 +228,16 @@ null_results %>%
 settings <- crossing(
   mouse_sd = c(0, 0.1, 0.2, 0.28),
   mouse_cond_sd = c(0, 0.05, 0.1, 0.2),
-  composition = c("fixed", "redrawn"),
+  composition = c("observed", "fixed", "redrawn"),
   effect_silence = c(
     0,
     log(0.85),
-    log(4.64 / 8.37)
+    sim_inputs$effect_late
   )
 ) %>%
-  filter(mouse_sd^2 + mouse_cond_sd^2 <= 0.09)
+  filter(
+    mouse_sd^2 + mouse_cond_sd^2 <= sim_inputs$total_sd_log^2
+  ) 
   
 
 set.seed(123)
@@ -175,13 +247,14 @@ results <- pmap_dfr(
   function(mouse_sd, mouse_cond_sd,
            composition, effect_silence) {
     
-    map_dfr(1:500, function(i) {
+    map_dfr(1:10, function(i) {
       
       d <- simulate_songs(
         effect_silence = effect_silence,
         mouse_sd = mouse_sd,
         mouse_cond_sd = mouse_cond_sd,
-        composition = composition
+        composition = composition,
+        sim_inputs = sim_inputs
       )
       
       analyze_songs(d) %>%

@@ -2,64 +2,54 @@
 
 **The project has two parts, and you need both** (Bria: the reproduction can be in Python):
 
-1. **Reproduction.** Rerun the authors' analysis on their data and get Fig 7C. Song duration pre vs post-late, Mann-Whitney p = 1.53e-19.
-2. **Simulation.** Your pooled vs per-mouse test simulation (`scripts/dataset_simulations.R`). It's mostly done; it just needs real-data inputs.
+1.  **Reproduction.** Rerun the authors' analysis on their data and get Fig 7C. Song duration pre vs post-late, Mann-Whitney p = 1.53e-19.
+2.  **Simulation.** Your pooled vs per-mouse test simulation (`scripts/dataset_simulations.R`). It's mostly done; it just needs real-data inputs.
 
 You do **not** need to translate the authors' song detection into R. Run their Python and do everything after it in R.
 
----
+------------------------------------------------------------------------
 
 ## Step 1: Set up Python (≈15 min)
 
-```bash
+``` bash
 conda env create -f environment.yml     # if slow: add  --solver=libmamba
 conda activate zheng2025
 ```
+
 The env pins `scikit-learn=1.2.1` because that version fitted the authors' pickled models. A newer sklearn may fail to load them, or load them with a warning.
 
-Download these 3 files from https://github.com/singingmicelab/zheng-harpole-2025-vocalmodes-pag and put them in `original_paper/orig_pipeline/`:
-- `segment_features_scaler.pkl`
-- `segment_features_pca.pkl`
-- `segment_features_gmm.pkl`
+Download these 3 files from <https://github.com/singingmicelab/zheng-harpole-2025-vocalmodes-pag> and put them in `original_paper/orig_pipeline/`: - `segment_features_scaler.pkl` - `segment_features_pca.pkl` - `segment_features_gmm.pkl`
 
 (Your notebook run stopped on these: `FileNotFoundError: segment_features_scaler.pkl`.)
 
 ## Step 2: Extract songs (≈5 min)
 
-```bash
+``` bash
 python scripts/extract_songs.py
 ```
+
 This is the authors' notebook with only the cells needed for Fig 7C. It writes `data/songs_real.csv`, one row per song.
 
-**✅ Checkpoint:** the printout should show **157 / 153 / 54 songs** (pre / post_early / post_late), a pre mean of ~8.37 s, a post_late mean of ~4.64 s, and p ≈ 1e-19.
-If it doesn't, stop here and post the printout in the issue. Don't start the R part on wrong counts.
-(We ran it on 2026-11-20 and got exactly 157 / 153 / 54, 8.369 s / 4.643 s, p = 1.53e-19.)
+**✅ Checkpoint:** the printout should show **157 / 153 / 54 songs** (pre / post_early / post_late), a pre mean of \~8.37 s, a post_late mean of \~4.64 s, and p ≈ 1e-19. If it doesn't, stop here and post the printout in the issue. Don't start the R part on wrong counts. (We ran it on 2026-11-20 and got exactly 157 / 153 / 54, 8.369 s / 4.643 s, p = 1.53e-19.)
 
 You'll see 8 `MISSING curated file, skipped` lines. That's expected: those hours have no curated features file, and the authors' notebook skips them too.
 
 Look at the songs-per-mouse table it prints. **UM008 contributes 1 post-late song; MZ034 contributes 16.** This is the unequal mouse composition your simulation is about, so put it in the writeup.
 
-Understanding the pipeline (good use of AI). Ask it to walk you through these functions in `events.py`, in order, then write one paragraph for Methods:
-1. `compute_window_features`: sliding 7-note windows. A window is kept if its notes are evenly spaced (max log10 ISI ≤ −1, NRMSE ≤ 0.15).
-2. `merge_stereotypy_windows`: joins kept windows into segments (gap ≤ 0.5 s / 5 notes).
-3. `characterize_segments`: RANSAC line fit of note rate vs note index for each segment.
-4. `classify_segments`: the authors' GMM sorts segments into S1/S2/S3. **S1 = song.**
-5. `analyze_song_patterning`: song duration = fitted end − fitted start of each S1 segment.
+Understanding the pipeline (good use of AI). Ask it to walk you through these functions in `events.py`, in order, then write one paragraph for Methods: 1. `compute_window_features`: sliding 7-note windows. A window is kept if its notes are evenly spaced (max log10 ISI ≤ −1, NRMSE ≤ 0.15). 2. `merge_stereotypy_windows`: joins kept windows into segments (gap ≤ 0.5 s / 5 notes). 3. `characterize_segments`: RANSAC line fit of note rate vs note index for each segment. 4. `classify_segments`: the authors' GMM sorts segments into S1/S2/S3. **S1 = song.** 5. `analyze_song_patterning`: song duration = fitted end − fitted start of each S1 segment.
 
-Note: the `type` column in the CSVs is **not** used. It's an uncurated auto-label, and filtering on it is why your earlier durations came out at ~4 s instead of ~8 s.
-Also: "post_early" and "post_late" are **not days**. Each post session is split at the hour where half of the male notes have occurred.
+Note: the `type` column in the CSVs is **not** used. It's an uncurated auto-label, and filtering on it is why your earlier durations came out at \~4 s instead of \~8 s. Also: "post_early" and "post_late" are **not days**. Each post session is split at the hour where half of the male notes have occurred.
 
 ## Step 3: Reproduce Fig 7C in R (≈1–2 h)
 
-Fill in the `___` blanks in `scripts/reproduce_fig7c.R`. Each section ends with a CHECK.
-Section 4 (songs per mouse × condition) and section 5 (per-mouse test on the real data) connect the reproduction to your simulation. Don't skip them.
+Fill in the `___` blanks in `scripts/reproduce_fig7c.R`. Each section ends with a CHECK. Section 4 (songs per mouse × condition) and section 5 (per-mouse test on the real data) connect the reproduction to your simulation. Don't skip them.
 
 ## Step 4: Feed real values into the simulation (≈1 h)
 
 Section 6 of `reproduce_fig7c.R` computes `sim_inputs`. In `dataset_simulations.R`, replace:
 
 | currently | replace with |
-|---|---|
+|----|----|
 | `n_songs = c(157, 153, 54)` | `sim_inputs$n_songs` (should be the same, now from data) |
 | `log(8)` | `sim_inputs$baseline_log` |
 | `log(4.64 / 8.37)` | `sim_inputs$effect_late` |

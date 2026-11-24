@@ -1,91 +1,136 @@
 scenario,effect_silence,mouse_sd,mouse_cond_sd,composition,pooled_rate,mouse_rate,n_simulations
-15% reduction,-0.16251892949777494,0,0,fixed,0.906,0.578,500
-15% reduction,-0.16251892949777494,0,0,redrawn,0.914,0.622,500
-15% reduction,-0.16251892949777494,0,0.05,fixed,0.886,0.452,500
-15% reduction,-0.16251892949777494,0,0.05,redrawn,0.87,0.43,500
-15% reduction,-0.16251892949777494,0,0.1,fixed,0.796,0.334,500
-15% reduction,-0.16251892949777494,0,0.1,redrawn,0.768,0.32,500
-15% reduction,-0.16251892949777494,0,0.2,fixed,0.728,0.182,500
-15% reduction,-0.16251892949777494,0,0.2,redrawn,0.724,0.168,500
-15% reduction,-0.16251892949777494,0.1,0,fixed,0.93,0.66,500
-15% reduction,-0.16251892949777494,0.1,0,redrawn,0.876,0.578,500
-15% reduction,-0.16251892949777494,0.1,0.05,fixed,0.878,0.516,500
-15% reduction,-0.16251892949777494,0.1,0.05,redrawn,0.804,0.498,500
-15% reduction,-0.16251892949777494,0.1,0.1,fixed,0.792,0.338,500
-15% reduction,-0.16251892949777494,0.1,0.1,redrawn,0.762,0.38,500
-15% reduction,-0.16251892949777494,0.1,0.2,fixed,0.764,0.146,500
-15% reduction,-0.16251892949777494,0.1,0.2,redrawn,0.76,0.162,500
-15% reduction,-0.16251892949777494,0.2,0,fixed,0.936,0.794,500
-15% reduction,-0.16251892949777494,0.2,0,redrawn,0.82,0.78,500
-15% reduction,-0.16251892949777494,0.2,0.05,fixed,0.892,0.632,500
-15% reduction,-0.16251892949777494,0.2,0.05,redrawn,0.79,0.59,500
-15% reduction,-0.16251892949777494,0.2,0.1,fixed,0.778,0.374,500
-15% reduction,-0.16251892949777494,0.2,0.1,redrawn,0.77,0.426,500
-15% reduction,-0.16251892949777494,0.2,0.2,fixed,0.746,0.152,500
-15% reduction,-0.16251892949777494,0.2,0.2,redrawn,0.76,0.19,500
-15% reduction,-0.16251892949777494,0.28,0,fixed,0.966,0.998,500
-15% reduction,-0.16251892949777494,0.28,0,redrawn,0.818,0.992,500
-15% reduction,-0.16251892949777494,0.28,0.05,fixed,0.932,0.908,500
-15% reduction,-0.16251892949777494,0.28,0.05,redrawn,0.838,0.89,500
-15% reduction,-0.16251892949777494,0.28,0.1,fixed,0.886,0.518,500
-15% reduction,-0.16251892949777494,0.28,0.1,redrawn,0.842,0.47,500
-Null: false positive rate,0,0,0,fixed,0.034,0.032,500
-Null: false positive rate,0,0,0,redrawn,0.06,0.034,500
-Null: false positive rate,0,0,0.05,fixed,0.09,0.048,500
-Null: false positive rate,0,0,0.05,redrawn,0.106,0.046,500
-Null: false positive rate,0,0,0.1,fixed,0.288,0.048,500
-Null: false positive rate,0,0,0.1,redrawn,0.272,0.054,500
-Null: false positive rate,0,0,0.2,fixed,0.582,0.054,500
-Null: false positive rate,0,0,0.2,redrawn,0.534,0.038,500
-Null: false positive rate,0,0.1,0,fixed,0.044,0.032,500
-Null: false positive rate,0,0.1,0,redrawn,0.096,0.038,500
-Null: false positive rate,0,0.1,0.05,fixed,0.118,0.056,500
-Null: false positive rate,0,0.1,0.05,redrawn,0.158,0.054,500
-Null: false positive rate,0,0.1,0.1,fixed,0.292,0.04,500
-Null: false positive rate,0,0.1,0.1,redrawn,0.306,0.048,500
-Null: false positive rate,0,0.1,0.2,fixed,0.568,0.038,500
-Null: false positive rate,0,0.1,0.2,redrawn,0.588,0.056,500
-Null: false positive rate,0,0.2,0,fixed,0.048,0.054,500
-Null: false positive rate,0,0.2,0,redrawn,0.256,0.034,500
-Null: false positive rate,0,0.2,0.05,fixed,0.148,0.058,500
-Null: false positive rate,0,0.2,0.05,redrawn,0.316,0.032,500
-Null: false positive rate,0,0.2,0.1,fixed,0.338,0.044,500
-Null: false positive rate,0,0.2,0.1,redrawn,0.432,0.042,500
-Null: false positive rate,0,0.2,0.2,fixed,0.622,0.06,500
-Null: false positive rate,0,0.2,0.2,redrawn,0.616,0.052,500
-Null: false positive rate,0,0.28,0,fixed,0.03,0.03,500
-Null: false positive rate,0,0.28,0,redrawn,0.438,0.048,500
-Null: false positive rate,0,0.28,0.05,fixed,0.208,0.064,500
-Null: false positive rate,0,0.28,0.05,redrawn,0.446,0.04,500
-Null: false positive rate,0,0.28,0.1,fixed,0.488,0.05,500
-Null: false positive rate,0,0.28,0.1,redrawn,0.612,0.046,500
-Observed reduction (44.6%),-0.5899395182632201,0,0,fixed,1,0.998,500
-Observed reduction (44.6%),-0.5899395182632201,0,0,redrawn,1,0.998,500
-Observed reduction (44.6%),-0.5899395182632201,0,0.05,fixed,1,0.992,500
-Observed reduction (44.6%),-0.5899395182632201,0,0.05,redrawn,1,0.998,500
-Observed reduction (44.6%),-0.5899395182632201,0,0.1,fixed,1,1,500
-Observed reduction (44.6%),-0.5899395182632201,0,0.1,redrawn,1,0.994,500
-Observed reduction (44.6%),-0.5899395182632201,0,0.2,fixed,0.998,0.898,500
-Observed reduction (44.6%),-0.5899395182632201,0,0.2,redrawn,0.998,0.904,500
-Observed reduction (44.6%),-0.5899395182632201,0.1,0,fixed,1,1,500
-Observed reduction (44.6%),-0.5899395182632201,0.1,0,redrawn,1,1,500
-Observed reduction (44.6%),-0.5899395182632201,0.1,0.05,fixed,1,1,500
-Observed reduction (44.6%),-0.5899395182632201,0.1,0.05,redrawn,1,0.998,500
-Observed reduction (44.6%),-0.5899395182632201,0.1,0.1,fixed,1,0.998,500
-Observed reduction (44.6%),-0.5899395182632201,0.1,0.1,redrawn,1,0.996,500
-Observed reduction (44.6%),-0.5899395182632201,0.1,0.2,fixed,1,0.908,500
-Observed reduction (44.6%),-0.5899395182632201,0.1,0.2,redrawn,0.998,0.918,500
-Observed reduction (44.6%),-0.5899395182632201,0.2,0,fixed,1,1,500
-Observed reduction (44.6%),-0.5899395182632201,0.2,0,redrawn,1,1,500
-Observed reduction (44.6%),-0.5899395182632201,0.2,0.05,fixed,1,1,500
-Observed reduction (44.6%),-0.5899395182632201,0.2,0.05,redrawn,1,1,500
-Observed reduction (44.6%),-0.5899395182632201,0.2,0.1,fixed,1,1,500
-Observed reduction (44.6%),-0.5899395182632201,0.2,0.1,redrawn,1,1,500
-Observed reduction (44.6%),-0.5899395182632201,0.2,0.2,fixed,1,0.908,500
-Observed reduction (44.6%),-0.5899395182632201,0.2,0.2,redrawn,0.994,0.94,500
-Observed reduction (44.6%),-0.5899395182632201,0.28,0,fixed,1,1,500
-Observed reduction (44.6%),-0.5899395182632201,0.28,0,redrawn,1,1,500
-Observed reduction (44.6%),-0.5899395182632201,0.28,0.05,fixed,1,1,500
-Observed reduction (44.6%),-0.5899395182632201,0.28,0.05,redrawn,0.996,1,500
-Observed reduction (44.6%),-0.5899395182632201,0.28,0.1,fixed,1,1,500
-Observed reduction (44.6%),-0.5899395182632201,0.28,0.1,redrawn,0.994,1,500
+15% reduction,-0.16251892949777494,0,0,fixed,0.9,0.6,10
+15% reduction,-0.16251892949777494,0,0,observed,0.9,0.6,10
+15% reduction,-0.16251892949777494,0,0,redrawn,0.8,0.2,10
+15% reduction,-0.16251892949777494,0,0.05,fixed,0.9,0.5,10
+15% reduction,-0.16251892949777494,0,0.05,observed,0.9,0.5,10
+15% reduction,-0.16251892949777494,0,0.05,redrawn,0.8,0.6,10
+15% reduction,-0.16251892949777494,0,0.1,fixed,0.7,0.6,10
+15% reduction,-0.16251892949777494,0,0.1,observed,0.7,0.3,10
+15% reduction,-0.16251892949777494,0,0.1,redrawn,0.8,0.3,10
+15% reduction,-0.16251892949777494,0,0.2,fixed,0.9,0.2,10
+15% reduction,-0.16251892949777494,0,0.2,observed,0.8,0,10
+15% reduction,-0.16251892949777494,0,0.2,redrawn,0.7,0.1,10
+15% reduction,-0.16251892949777494,0.1,0,fixed,0.9,0.6,10
+15% reduction,-0.16251892949777494,0.1,0,observed,0.7,0.6,10
+15% reduction,-0.16251892949777494,0.1,0,redrawn,0.8,0.5,10
+15% reduction,-0.16251892949777494,0.1,0.05,fixed,0.9,0.6,10
+15% reduction,-0.16251892949777494,0.1,0.05,observed,1,0.8,10
+15% reduction,-0.16251892949777494,0.1,0.05,redrawn,0.8,0.8,10
+15% reduction,-0.16251892949777494,0.1,0.1,fixed,0.4,0.2,10
+15% reduction,-0.16251892949777494,0.1,0.1,observed,0.7,0.2,10
+15% reduction,-0.16251892949777494,0.1,0.1,redrawn,0.7,0.6,10
+15% reduction,-0.16251892949777494,0.1,0.2,fixed,0.9,0.3,10
+15% reduction,-0.16251892949777494,0.1,0.2,observed,0.8,0.5,10
+15% reduction,-0.16251892949777494,0.1,0.2,redrawn,0.8,0.1,10
+15% reduction,-0.16251892949777494,0.2,0,fixed,0.9,0.7,10
+15% reduction,-0.16251892949777494,0.2,0,observed,0.8,0.8,10
+15% reduction,-0.16251892949777494,0.2,0,redrawn,0.8,0.6,10
+15% reduction,-0.16251892949777494,0.2,0.05,fixed,0.9,0.8,10
+15% reduction,-0.16251892949777494,0.2,0.05,observed,0.8,0.6,10
+15% reduction,-0.16251892949777494,0.2,0.05,redrawn,0.7,0.4,10
+15% reduction,-0.16251892949777494,0.2,0.1,fixed,0.6,0.2,10
+15% reduction,-0.16251892949777494,0.2,0.1,observed,1,0.5,10
+15% reduction,-0.16251892949777494,0.2,0.1,redrawn,0.8,0.3,10
+15% reduction,-0.16251892949777494,0.2,0.2,fixed,0.7,0.1,10
+15% reduction,-0.16251892949777494,0.2,0.2,observed,0.8,0.2,10
+15% reduction,-0.16251892949777494,0.2,0.2,redrawn,0.8,0,10
+15% reduction,-0.16251892949777494,0.28,0,fixed,1,1,10
+15% reduction,-0.16251892949777494,0.28,0,observed,0.8,0.9,10
+15% reduction,-0.16251892949777494,0.28,0,redrawn,0.7,1,10
+15% reduction,-0.16251892949777494,0.28,0.05,fixed,0.9,0.7,10
+15% reduction,-0.16251892949777494,0.28,0.05,observed,0.5,0.9,10
+15% reduction,-0.16251892949777494,0.28,0.05,redrawn,0.9,0.9,10
+15% reduction,-0.16251892949777494,0.28,0.1,fixed,0.9,0.7,10
+15% reduction,-0.16251892949777494,0.28,0.1,observed,0.7,0.3,10
+15% reduction,-0.16251892949777494,0.28,0.1,redrawn,1,0.6,10
+Null: false positive rate,0,0,0,fixed,0,0.3,10
+Null: false positive rate,0,0,0,observed,0,0,10
+Null: false positive rate,0,0,0,redrawn,0,0.1,10
+Null: false positive rate,0,0,0.05,fixed,0.2,0,10
+Null: false positive rate,0,0,0.05,observed,0.1,0,10
+Null: false positive rate,0,0,0.05,redrawn,0.1,0,10
+Null: false positive rate,0,0,0.1,fixed,0.2,0,10
+Null: false positive rate,0,0,0.1,observed,0.3,0,10
+Null: false positive rate,0,0,0.1,redrawn,0.2,0,10
+Null: false positive rate,0,0,0.2,fixed,0.4,0,10
+Null: false positive rate,0,0,0.2,observed,0.5,0.1,10
+Null: false positive rate,0,0,0.2,redrawn,0.3,0,10
+Null: false positive rate,0,0.1,0,fixed,0.1,0,10
+Null: false positive rate,0,0.1,0,observed,0.1,0,10
+Null: false positive rate,0,0.1,0,redrawn,0.1,0.2,10
+Null: false positive rate,0,0.1,0.05,fixed,0.1,0.2,10
+Null: false positive rate,0,0.1,0.05,observed,0,0,10
+Null: false positive rate,0,0.1,0.05,redrawn,0.1,0,10
+Null: false positive rate,0,0.1,0.1,fixed,0.3,0.1,10
+Null: false positive rate,0,0.1,0.1,observed,0,0,10
+Null: false positive rate,0,0.1,0.1,redrawn,0.1,0,10
+Null: false positive rate,0,0.1,0.2,fixed,0.3,0,10
+Null: false positive rate,0,0.1,0.2,observed,0.4,0,10
+Null: false positive rate,0,0.1,0.2,redrawn,0.6,0.1,10
+Null: false positive rate,0,0.2,0,fixed,0.1,0,10
+Null: false positive rate,0,0.2,0,observed,0.3,0,10
+Null: false positive rate,0,0.2,0,redrawn,0.4,0,10
+Null: false positive rate,0,0.2,0.05,fixed,0,0.1,10
+Null: false positive rate,0,0.2,0.05,observed,0.4,0,10
+Null: false positive rate,0,0.2,0.05,redrawn,0.4,0,10
+Null: false positive rate,0,0.2,0.1,fixed,0.2,0.1,10
+Null: false positive rate,0,0.2,0.1,observed,0.4,0,10
+Null: false positive rate,0,0.2,0.1,redrawn,0.2,0,10
+Null: false positive rate,0,0.2,0.2,fixed,0.4,0.1,10
+Null: false positive rate,0,0.2,0.2,observed,0.7,0.2,10
+Null: false positive rate,0,0.2,0.2,redrawn,0.8,0,10
+Null: false positive rate,0,0.28,0,fixed,0,0,10
+Null: false positive rate,0,0.28,0,observed,0.1,0,10
+Null: false positive rate,0,0.28,0,redrawn,0.4,0,10
+Null: false positive rate,0,0.28,0.05,fixed,0.3,0.1,10
+Null: false positive rate,0,0.28,0.05,observed,0.5,0,10
+Null: false positive rate,0,0.28,0.05,redrawn,0.7,0,10
+Null: false positive rate,0,0.28,0.1,fixed,0.6,0.1,10
+Null: false positive rate,0,0.28,0.1,observed,0.5,0,10
+Null: false positive rate,0,0.28,0.1,redrawn,0.4,0,10
+Observed reduction (44.6%),-0.5896036425655822,0,0,fixed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0,0,observed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0,0,redrawn,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0,0.05,fixed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0,0.05,observed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0,0.05,redrawn,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0,0.1,fixed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0,0.1,observed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0,0.1,redrawn,1,0.9,10
+Observed reduction (44.6%),-0.5896036425655822,0,0.2,fixed,1,0.9,10
+Observed reduction (44.6%),-0.5896036425655822,0,0.2,observed,1,0.9,10
+Observed reduction (44.6%),-0.5896036425655822,0,0.2,redrawn,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.1,0,fixed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.1,0,observed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.1,0,redrawn,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.1,0.05,fixed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.1,0.05,observed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.1,0.05,redrawn,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.1,0.1,fixed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.1,0.1,observed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.1,0.1,redrawn,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.1,0.2,fixed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.1,0.2,observed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.1,0.2,redrawn,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.2,0,fixed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.2,0,observed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.2,0,redrawn,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.2,0.05,fixed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.2,0.05,observed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.2,0.05,redrawn,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.2,0.1,fixed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.2,0.1,observed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.2,0.1,redrawn,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.2,0.2,fixed,1,0.9,10
+Observed reduction (44.6%),-0.5896036425655822,0.2,0.2,observed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.2,0.2,redrawn,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.28,0,fixed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.28,0,observed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.28,0,redrawn,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.28,0.05,fixed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.28,0.05,observed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.28,0.05,redrawn,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.28,0.1,fixed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.28,0.1,observed,1,1,10
+Observed reduction (44.6%),-0.5896036425655822,0.28,0.1,redrawn,1,1,10
